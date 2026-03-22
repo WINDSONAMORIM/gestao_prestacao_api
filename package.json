@@ -6,9 +6,10 @@
   "license": "ISC",
   "author": "",
   "scripts": {
-    "dev": "tsx --watch src/index.ts"
+    "dev": "tsx --watch src/server.ts"
   },
   "dependencies": {
+    "@types/pg": "^8.20.0",
     "dotenv": "^17.3.1",
     "fastify": "^5.8.2",
     "pg": "^8.20.0"
