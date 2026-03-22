@@ -1,0 +1,21 @@
+{
+  "name": "gestao_prestacao_api",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "license": "ISC",
+  "author": "",
+  "scripts": {
+    "dev": "tsx --watch src/index.ts"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "fastify": "^5.8.2",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
