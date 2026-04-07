@@ -8,4 +8,14 @@ export class OrcadoController {
     const result = await this.service.getTotalOrcado();
     return  success({total:result });
   }
+
+  async getGrupo() {
+    const result = await this.service.getGrupo();
+    return success(result);
+  }
+
+  async getOrcadoByGrupo(grupo: string) {
+    const result = await this.service.getOrcadoByGrupo(grupo);
+    return success({ total: result });
+  }
 }

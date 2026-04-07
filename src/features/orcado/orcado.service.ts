@@ -13,4 +13,20 @@ export class OrcadoService {
 
     return result;
   }
+
+  async getGrupo() {
+    const result = await this.repository.getGrupo();
+    if (!result) {
+      throw new AppError("Nenhum grupo encontrado", 404);
+    } 
+    return result;  
+  }
+
+  async getOrcadoByGrupo(grupo: string) {
+    const result = await this.repository.getOrcadoByGrupo(grupo);
+    if (!result) {
+      throw new AppError("Nenhum orçamento encontrado para o grupo especificado", 404);
+    }
+    return result;
+  }
 }

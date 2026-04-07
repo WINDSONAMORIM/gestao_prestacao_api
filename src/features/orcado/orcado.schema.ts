@@ -13,3 +13,12 @@ export const orcadoTotalSchema = orcadoResponseSchema(
     total: z.number(),
   }),
 );
+
+export const orcadoGrupoSchema = orcadoResponseSchema(
+  z.array(
+    z.object({
+      id: z.string(),
+      descricao: z.string(),
+    })
+  )
+);
