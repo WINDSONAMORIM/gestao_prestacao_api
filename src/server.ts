@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import swagger from "@fastify/swagger";
 import fastifyApiReference from "@scalar/fastify-api-reference";
 import dotenv from "dotenv";
+import cors from "@fastify/cors";
 
 import {
   serializerCompiler,
@@ -15,6 +16,11 @@ import { error } from "./utils/apiResponse.js";
 dotenv.config();
 const app = Fastify();
 
+app.register(cors, {
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+});
+
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
@@ -27,7 +33,7 @@ await app.register(swagger, {
         "API para gerenciamento de prestação de contas, incluindo orçamentos, despesas e receitas.",
     },
   },
-    transform: jsonSchemaTransform,
+  transform: jsonSchemaTransform,
 });
 
 await app.register(fastifyApiReference, {
@@ -35,6 +41,8 @@ await app.register(fastifyApiReference, {
 });
 
 app.register(import("./routes/orcado.js"));
+app.register(import("./routes/realizado.js"));
+app.register(import("./modulos/financeiro/financeiro.routes.js"));
 
 app.setErrorHandler((err, request, reply) => {
   if (err instanceof AppError) {
