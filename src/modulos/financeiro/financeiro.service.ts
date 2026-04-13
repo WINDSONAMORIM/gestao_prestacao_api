@@ -11,6 +11,22 @@ export class FinanceiroService {
     return result;
   }
 
+  async getResumoPorSubGrupo(grupoId?: string) {
+    const result = await this.repository.getResumoPorSubGrupo(grupoId);
+    if (!result || result.length === 0) {
+      throw new Error("Nenhum resumo encontrado por subgrupo");
+    }
+    return result;
+  }
+
+  async getTendenciaMensalPorGrupo(grupoId: string) {
+    const result = await this.repository.getTendenciaMensalPorGrupo(grupoId);
+    if (!result || result.length === 0) {
+      throw new Error("Nenhuma tendência mensal encontrada por grupo");
+    }
+    return result;
+  }
+
   async getVariacaoOrcadoRealizado() {
     const variacao = await this.repository.getVariacaoOrcadoRealizado();
     if (variacao === null || variacao === undefined) {

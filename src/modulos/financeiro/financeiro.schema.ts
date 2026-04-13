@@ -21,10 +21,22 @@ export const financeiroResumoSchema = financeiroResponseSchema(
   ),
 );
 
-export const financeiroVariacaoSchema = financeiroResponseSchema(
-  z.number(),
+export const financeiroTendenciaMensalSchema = financeiroResponseSchema(
+  z.array(
+    z.object({
+      mes: z.string(),
+      orcado: z.number(),
+      realizado: z.number(),
+    }),
+  ),
 );
 
-export const financeiroExecucaoSchema = financeiroResponseSchema(
-  z.number(), 
-);
+export const financeiroParamsGrupoSchema = z.object({
+  grupoId: z.coerce
+    .string()
+    .transform((val) => val.replace(/\D/g, "").padStart(2, "0")),
+});
+
+export const financeiroVariacaoSchema = financeiroResponseSchema(z.number());
+
+export const financeiroExecucaoSchema = financeiroResponseSchema(z.number());
