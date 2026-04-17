@@ -3,16 +3,25 @@ import { FinanceiroRepository } from "./financeiro.repository.js";
 export class FinanceiroService {
   constructor(private repository: FinanceiroRepository) {}
 
-  async getResumoPorGrupo() {
-    const result = await this.repository.getResumoPorGrupo();
+  async getResumoAnualPorGrupo(ano: number) {
+    const result = await this.repository.getResumoAnualPorGrupo(ano);
     if (!result || result.length === 0) {
       throw new Error("Nenhum resumo encontrado por grupo");
     }
     return result;
   }
 
-  async getResumoPorSubGrupo(grupoId?: string) {
-    const result = await this.repository.getResumoPorSubGrupo(grupoId);
+  async getResumoMensalPorGrupo(ano: number, mes: number) {
+    const result = await this.repository.getResumoMensalPorGrupo(ano, mes);
+    if (!result || result.length === 0) {
+      throw new Error("Nenhum resumo encontrado por grupo");
+    }
+    return result;
+  }
+
+  async getResumoAnualPorSubGrupo(ano:number, grupoId?: string) {
+    console.log(`Service Ano: ${ano} Grupo: ${grupoId}`)
+    const result = await this.repository.getResumoAnualPorSubGrupo(ano, grupoId);
     if (!result || result.length === 0) {
       throw new Error("Nenhum resumo encontrado por subgrupo");
     }

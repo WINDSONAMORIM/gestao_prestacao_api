@@ -1,39 +1,26 @@
 import { pool } from "../../lib/db.js";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import { queries } from "./queries/index.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const getResumoPorGrupoQuery = fs.readFileSync(
-  path.resolve(__dirname, "queries", "getResumoPorGrupo.sql"),
-  "utf8",
-);
-
-const getResumoPorSubGrupoQuery = fs.readFileSync(
-  path.resolve(__dirname, "queries", "getResumoPorSubGrupo.sql"),
-  "utf8",
-);
-
-const getTendenciaMensalPorGrupoQuery = fs.readFileSync(
-  path.resolve(__dirname, "queries", "getTendenciaMensalPorGrupo.sql"),
-  "utf8",
-);
 export class FinanceiroRepository {
-  async getResumoPorGrupo() {
-    const result = await pool.query(getResumoPorGrupoQuery);
+  async getResumoAnualPorGrupo(ano: number) {
+    const result = await pool.query(queries.getResumoAnualPorGrupo, [ano]);
     return result.rows;
   }
 
-  async getResumoPorSubGrupo(grupoId?: string) {
-    const result = await pool.query(getResumoPorSubGrupoQuery, [grupoId]);
+  async getResumoMensalPorGrupo(ano: number, mes: number) {
+    const result = await pool.query(queries.getResumoMensalPorGrupo, [ano,mes]);
+    return result.rows;
+  }
+
+  async getResumoAnualPorSubGrupo(ano: number, grupoId?: string) {
+    console.log(`Repository Ano: ${ano} Grupo: ${grupoId}`)
+    const result = await pool.query(queries.getResumoAnualPorSubGrupo, [ano, grupoId]);
     return result.rows;
   }
 
   async getTendenciaMensalPorGrupo(grupoId: string) {
     console.log("grupoId:", grupoId, "length:", grupoId?.length);
-    const result = await pool.query(getTendenciaMensalPorGrupoQuery, [grupoId]);
+    const result = await pool.query(queries.getTendenciaMensalPorGrupo, [grupoId]);
     return result.rows;
   }
 

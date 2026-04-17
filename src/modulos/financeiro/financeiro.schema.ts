@@ -21,6 +21,11 @@ export const financeiroResumoSchema = financeiroResponseSchema(
   ),
 );
 
+export const financeiroAnualResumoSchema = z.object({
+      ano: z.coerce.number(),
+      grupoId: z.string(),
+    });
+
 export const financeiroTendenciaMensalSchema = financeiroResponseSchema(
   z.array(
     z.object({
@@ -30,6 +35,15 @@ export const financeiroTendenciaMensalSchema = financeiroResponseSchema(
     }),
   ),
 );
+
+export const financeiroParamsAnoSchema = z.object({
+  ano: z.coerce.number()
+});
+
+export const financeiroParamsMensalSchema = z.object({
+  ano: z.coerce.number(),
+  mes: z.coerce.number().min(1).max(12)
+});
 
 export const financeiroParamsGrupoSchema = z.object({
   grupoId: z.coerce

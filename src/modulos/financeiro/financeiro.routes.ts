@@ -4,8 +4,11 @@ import { FinanceiroController } from "./financeiro.controller.js";
 import { FinanceiroRepository } from "./financeiro.repository.js";
 import { FinanceiroService } from "./financeiro.service.js";
 import {
+  financeiroAnualResumoSchema,
   financeiroExecucaoSchema,
+  financeiroParamsAnoSchema,
   financeiroParamsGrupoSchema,
+  financeiroParamsMensalSchema,
   financeiroResumoSchema,
   financeiroTendenciaMensalSchema,
   financeiroVariacaoSchema,
@@ -18,27 +21,11 @@ const financeiroController = new FinanceiroController(financeiroService);
 
 export default async function financeiroRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/financeiro/resumo-grupo",
+    "/financeiro/resumo-anual-grupo/:ano",
     {
       schema: {
-        description: "Rota para obter o resumo por grupo financeiro",
-        tags: ["Financeiro"],
-        response: {
-          200: financeiroResumoSchema,
-        },
-      },
-    },
-    async () => {
-      return financeiroController.getResumoPorGrupo();
-    },
-  );
-
-  app.withTypeProvider<ZodTypeProvider>().get(
-    "/financeiro/resumo-subgrupo/:grupoId",
-    {
-      schema: {
-        params: financeiroParamsGrupoSchema,
-        description: "Rota para obter o resumo por subgrupo financeiro",
+        params: financeiroParamsAnoSchema,
+        description: "Rota para obter o resumo anual por grupo financeiro",
         tags: ["Financeiro"],
         response: {
           200: financeiroResumoSchema,
@@ -46,8 +33,48 @@ export default async function financeiroRoutes(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const { grupoId } = request.params;
-      const result = await financeiroController.getResumoPorSubGrupo(grupoId);
+      const { ano } = request.params
+      const result = await financeiroController.getResumoAnualPorGrupo(ano) 
+      return reply.send(result);
+    },
+  );
+
+  app.withTypeProvider<ZodTypeProvider>().get(
+    "/financeiro/resumo-mensal-grupo/:ano/:mes",
+    {
+      schema: {
+        params: financeiroParamsMensalSchema,
+        description: "Rota para obter o resumo mensal por grupo financeiro",
+        tags: ["Financeiro"],
+        response: {
+          200: financeiroResumoSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      const { ano, mes } = request.params
+      const result = await financeiroController.getResumoMensalPorGrupo(ano, mes) 
+      return reply.send(result);
+    },
+  );
+
+  app.withTypeProvider<ZodTypeProvider>().get(
+    "/financeiro/resumo-anual-subgrupo/:ano/:grupoId",
+    {
+      schema: {
+        params: financeiroAnualResumoSchema,
+        description: "Rota para obter o resumo anual por subgrupo financeiro",
+        tags: ["Financeiro"],
+        response: {
+          200: financeiroResumoSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      const { ano, grupoId } = request.params;
+      console.log(request.params);
+      console.log(`Rota Ano: ${ano} Grupo: ${grupoId}`)
+      const result = await financeiroController.getResumoAnualPorSubGrupo(ano, grupoId);
 
       return reply.send(result);
     },

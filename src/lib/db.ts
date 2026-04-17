@@ -7,3 +7,5 @@ export const pool = new Pool({
     rejectUnauthorized: false,
   },
 });
+
+console.log(`URL Postgre: ${process.env.DATABASE_URL}`)

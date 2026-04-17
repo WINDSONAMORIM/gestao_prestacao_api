@@ -7,13 +7,19 @@ import z from "zod";
 export class FinanceiroController {
   constructor(private service: FinanceiroService) {}
 
-  async getResumoPorGrupo() {
-    const result = await this.service.getResumoPorGrupo();
+  async getResumoAnualPorGrupo(ano: number) {
+    const result = await this.service.getResumoAnualPorGrupo(ano);
     return success(result);
   }
 
-  async getResumoPorSubGrupo(grupoId: string) {
-    const result = await this.service.getResumoPorSubGrupo(grupoId);
+  async getResumoMensalPorGrupo(ano: number, mes: number) {
+    const result = await this.service.getResumoMensalPorGrupo(ano, mes);
+    return success(result);
+  }
+
+  async getResumoAnualPorSubGrupo(ano: number, grupoId: string) {
+    console.log(`Controller Ano: ${ano} Grupo: ${grupoId}`)
+    const result = await this.service.getResumoAnualPorSubGrupo(ano, grupoId);
     return success(result);
   }
 
