@@ -7,7 +7,6 @@ WITH orcado AS (
   JOIN rubrica rb ON rb.id_rubrica = o.id_rubrica
   JOIN subgrupo sg ON sg.id_subgrupo = rb.id_subgrupo
   WHERE dt.ano = $1
-    AND dt.mes = $2
   GROUP BY sg.id_grupo
 ),
 realizado AS (
@@ -19,15 +18,21 @@ realizado AS (
   JOIN rubrica rb ON rb.id_rubrica = r.id_rubrica
   JOIN subgrupo sg ON sg.id_subgrupo = rb.id_subgrupo
   WHERE dt.ano = $1
-    AND dt.mes = $2
   GROUP BY sg.id_grupo
 )
 SELECT 
-  g.id_grupo,
-  g.descricao,
+  r.id_grupo,
   COALESCE(o.total_orcado, 0) AS orcado,
-  COALESCE(r.total_realizado, 0) AS realizado
-FROM grupo g
-LEFT JOIN orcado o ON o.id_grupo = g.id_grupo
-LEFT JOIN realizado r ON r.id_grupo = g.id_grupo
-ORDER BY g.id_grupo;
+  r.total_realizado AS realizado,
+  (r.total_realizado - COALESCE(o.total_orcado, 0)) AS diferenca,
+ CASE 
+  WHEN COALESCE(o.total_orcado, 0) = 0 
+       AND r.total_realizado > 0 THEN 100
+  WHEN COALESCE(o.total_orcado, 0) = 0 
+       THEN 0
+  ELSE ROUND(((r.total_realizado / o.total_orcado) * 100)::numeric, 2)
+END AS perc
+FROM realizado r
+LEFT JOIN orcado o ON o.id_grupo = r.id_grupo
+ORDER BY diferenca desc
+limit 5;

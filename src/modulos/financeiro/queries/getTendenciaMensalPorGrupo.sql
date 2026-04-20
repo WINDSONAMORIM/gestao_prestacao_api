@@ -1,22 +1,22 @@
 WITH orcado AS (
   SELECT 
-    sg.grupo_id,
+    sg.id_grupo,
     o.mes,
     SUM(o.valor) AS total_orcado
   FROM fato_orcado o
-  JOIN rubrica rb ON rb.id = o.rubrica
-  JOIN subgrupo sg ON sg.id = rb.subgrupo_id
-  GROUP BY sg.grupo_id, o.mes
+  JOIN rubrica rb ON rb.id_rubrica = o.id_rubrica
+  JOIN subgrupo sg ON sg.id_subgrupo = rb.id_subgrupo
+  GROUP BY sg.id_grupo, o.mes
 ),
 realizado AS (
   SELECT 
-    sg.grupo_id,
+    sg.id_grupo,
     r.mes,
     SUM(r.valor) AS total_realizado
   FROM fato_realizado r
-  JOIN rubrica rb ON rb.id = r.rubrica
-  JOIN subgrupo sg ON sg.id = rb.subgrupo_id
-  GROUP BY sg.grupo_id, r.mes
+  JOIN rubrica rb ON rb.id_rubrica = r.id_rubrica
+  JOIN subgrupo sg ON sg.id_subgrupo = rb.id_subgrupo
+  GROUP BY sg.id_grupo, r.mes
 )
 SELECT 
   COALESCE(o.mes, r.mes) AS mes,
@@ -24,7 +24,7 @@ SELECT
   COALESCE(r.total_realizado, 0) AS realizado
 FROM orcado o
 FULL OUTER JOIN realizado r 
-  ON r.grupo_id = o.grupo_id 
+  ON r.id_grupo = o.id_grupo 
  AND r.mes = o.mes
-WHERE COALESCE(o.grupo_id, r.grupo_id) = $1
+WHERE COALESCE(o.id_grupo, r.id_grupo) = $1
 ORDER BY mes;
