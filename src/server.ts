@@ -10,8 +10,7 @@ import {
   jsonSchemaTransform,
 } from "fastify-type-provider-zod";
 
-import { AppError } from "./utils/appError.js";
-import { error } from "./utils/apiResponse.js";
+import { errorHandler } from "./utils/erroHandler.js";
 
 dotenv.config();
 const app = Fastify();
@@ -44,15 +43,7 @@ app.register(import("./routes/orcado.js"));
 app.register(import("./routes/realizado.js"));
 app.register(import("./modulos/financeiro/financeiro.routes.js"));
 
-app.setErrorHandler((err, request, reply) => {
-  if (err instanceof AppError) {
-    return reply
-      .status(err.statusCode)
-      .send(error(err.message, err.statusCode));
-  }
-  console.error(err);
-  return reply.status(500).send(error("Erro Interno do Servidor", 500));
-});
+await errorHandler(app);
 
 app.listen({ port: Number(process.env.PORT) || 8080 }).then(() => {
   console.log(
