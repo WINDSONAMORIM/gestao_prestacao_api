@@ -13,7 +13,7 @@ export const financeiroResponseSchema = <T extends z.ZodTypeAny>(
 export const financeiroResumoSchema = financeiroResponseSchema(
   z.array(
     z.object({
-      id: z.string(),
+      id_grupo: z.string(),
       descricao: z.string(),
       orcado: z.number().nullable(),
       realizado: z.number().nullable(),

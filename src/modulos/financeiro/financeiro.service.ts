@@ -7,7 +7,7 @@ export class FinanceiroService {
   async getResumoAnualPorGrupo(ano: number) {
     const result = await this.repository.getResumoAnualPorGrupo(ano);
     if (!result || result.length === 0) {
-      throw new Error("Nenhum resumo encontrado por grupo");
+      throw new AppError("Nenhum resumo encontrado por grupo");
     }
     return result;
   }
@@ -15,7 +15,7 @@ export class FinanceiroService {
   async getResumoMensalPorGrupo(ano: number, mes: number) {
     const result = await this.repository.getResumoMensalPorGrupo(ano, mes);
     if (!result || result.length === 0) {
-      throw new Error("Nenhum resumo encontrado por grupo");
+      throw new AppError("Nenhum resumo encontrado por grupo");
     }
     return result;
   }
@@ -23,7 +23,7 @@ export class FinanceiroService {
   async getResumoAnualPorSubGrupo(ano:number, grupoId?: string) {
     const result = await this.repository.getResumoAnualPorSubGrupo(ano, grupoId);
     if (!result || result.length === 0) {
-      throw new Error("Nenhum resumo encontrado por subgrupo");
+      throw new AppError("Nenhum resumo encontrado por subgrupo");
     }
     return result;
   }
@@ -31,7 +31,7 @@ export class FinanceiroService {
   async getTendenciaMensalPorGrupo(grupoId: string) {
     const result = await this.repository.getTendenciaMensalPorGrupo(grupoId);
     if (!result || result.length === 0) {
-      throw new Error("Nenhuma tendência mensal encontrada por grupo");
+      throw new AppError("Nenhuma tendência mensal encontrada por grupo");
     }
     return result;
   }
@@ -39,7 +39,7 @@ export class FinanceiroService {
   async getVariacaoOrcadoRealizado() {
     const variacao = await this.repository.getVariacaoOrcadoRealizado();
     if (variacao === null || variacao === undefined) {
-      throw new Error("Não foi possível calcular a variação entre orçado e realizado");
+      throw new AppError("Não foi possível calcular a variação entre orçado e realizado");
     }
     return variacao;
   }
@@ -47,7 +47,7 @@ export class FinanceiroService {
   async getExecucaoOrcadoRealizado() {
     const execucao = await this.repository.getExecucaoOrcadoRealizado();
     if (execucao === null || execucao === undefined) {
-      throw new Error("Não foi possível calcular a execução entre orçado e realizado");
+      throw new AppError("Não foi possível calcular a execução entre orçado e realizado");
     } 
     return execucao;
   }

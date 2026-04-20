@@ -21,7 +21,7 @@ realizado AS (
   GROUP BY sg.id_grupo
 )
 SELECT 
-  g.id_grupo AS id,
+  g.id_grupo,
   g.descricao,
   COALESCE(o.total_orcado, 0) AS orcado,
   COALESCE(r.total_realizado, 0) AS realizado

@@ -1,6 +1,17 @@
 import z from "zod";
 import { financeiroResponseSchemaDTO } from "./dto.js";
 
+export const financeiroResumoResponseGrupo = financeiroResponseSchemaDTO(
+  z.array(
+    z.object({
+      id_grupo: z.string(),
+      descricao: z.string(),
+      orcado: z.number().nullable(),
+      realizado: z.number().nullable(),
+    }),
+  ),
+);
+
 export const financeiroResumoResponseSubgrupo = financeiroResponseSchemaDTO(
   z.array(
     z.object({

@@ -4,21 +4,17 @@ import { FinanceiroController } from "./financeiro.controller.js";
 import { FinanceiroRepository } from "./financeiro.repository.js";
 import { FinanceiroService } from "./financeiro.service.js";
 import {
-  financeiroAnualResumoSchema,
   financeiroExecucaoSchema,
-  // financeiroParamsAnoSchema,
   financeiroParamsGrupoSchema,
-  financeiroParamsMensalSchema,
-  financeiroResumoSchema,
   financeiroTendenciaMensalSchema,
   financeiroVariacaoSchema,
 } from "./financeiro.schema.js";
 import {
   excedenteAnualResponse,
+  financeiroResumoResponseGrupo,
   financeiroResumoResponseSubgrupo,
 } from "./schemas/response.js";
-import { financeiroParamsAnoSchema } from "./schemas/params.js";
-import z from "zod";
+import { financeiroParamsAnoGrupolSchema, financeiroParamsAnoSchema, financeiroParamsMensalSchema } from "./schemas/params.js";
 import { apiErrorResponseSchema } from "./schemas/error.js";
 
 const financeiroRepository = new FinanceiroRepository();
@@ -34,7 +30,7 @@ export default async function financeiroRoutes(app: FastifyInstance) {
         description: "Rota para obter o resumo anual por grupo financeiro",
         tags: ["Financeiro"],
         response: {
-          200: financeiroResumoSchema,
+          200: financeiroResumoResponseGrupo,
         },
       },
     },
@@ -53,12 +49,13 @@ export default async function financeiroRoutes(app: FastifyInstance) {
         description: "Rota para obter o resumo mensal por grupo financeiro",
         tags: ["Financeiro"],
         response: {
-          200: financeiroResumoSchema,
+          200: financeiroResumoResponseGrupo,
         },
       },
     },
     async (request, reply) => {
       const { ano, mes } = request.params;
+      console.log(`paramns: ${ano} - ${mes}`)
       const result = await financeiroController.getResumoMensalPorGrupo(
         ano,
         mes,
@@ -71,7 +68,7 @@ export default async function financeiroRoutes(app: FastifyInstance) {
     "/financeiro/resumo-anual-subgrupo/:ano/:grupoId",
     {
       schema: {
-        params: financeiroAnualResumoSchema,
+        params: financeiroParamsAnoGrupolSchema,
         description: "Rota para obter o resumo anual por subgrupo financeiro",
         tags: ["Financeiro"],
         response: {
