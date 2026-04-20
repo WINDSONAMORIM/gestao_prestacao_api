@@ -6,14 +6,20 @@ import { FinanceiroService } from "./financeiro.service.js";
 import {
   financeiroAnualResumoSchema,
   financeiroExecucaoSchema,
-  financeiroParamsAnoSchema,
+  // financeiroParamsAnoSchema,
   financeiroParamsGrupoSchema,
   financeiroParamsMensalSchema,
   financeiroResumoSchema,
   financeiroTendenciaMensalSchema,
   financeiroVariacaoSchema,
 } from "./financeiro.schema.js";
+import {
+  excedenteAnualResponse,
+  financeiroResumoResponseSubgrupo,
+} from "./schemas/response.js";
+import { financeiroParamsAnoSchema } from "./schemas/params.js";
 import z from "zod";
+import { apiErrorResponseSchema } from "./schemas/error.js";
 
 const financeiroRepository = new FinanceiroRepository();
 const financeiroService = new FinanceiroService(financeiroRepository);
@@ -33,8 +39,8 @@ export default async function financeiroRoutes(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const { ano } = request.params
-      const result = await financeiroController.getResumoAnualPorGrupo(ano) 
+      const { ano } = request.params;
+      const result = await financeiroController.getResumoAnualPorGrupo(ano);
       return reply.send(result);
     },
   );
@@ -52,8 +58,11 @@ export default async function financeiroRoutes(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const { ano, mes } = request.params
-      const result = await financeiroController.getResumoMensalPorGrupo(ano, mes) 
+      const { ano, mes } = request.params;
+      const result = await financeiroController.getResumoMensalPorGrupo(
+        ano,
+        mes,
+      );
       return reply.send(result);
     },
   );
@@ -66,15 +75,20 @@ export default async function financeiroRoutes(app: FastifyInstance) {
         description: "Rota para obter o resumo anual por subgrupo financeiro",
         tags: ["Financeiro"],
         response: {
-          200: financeiroResumoSchema,
+          200: financeiroResumoResponseSubgrupo,
         },
+        // 500: financeiroResumoSchema,
       },
     },
     async (request, reply) => {
       const { ano, grupoId } = request.params;
-      console.log(request.params);
-      console.log(`Rota Ano: ${ano} Grupo: ${grupoId}`)
-      const result = await financeiroController.getResumoAnualPorSubGrupo(ano, grupoId);
+      const result = await financeiroController.getResumoAnualPorSubGrupo(
+        ano,
+        grupoId,
+      );
+      console.log(
+        `params: { ano: ${ano}, grupoId: ${grupoId} }, "Resultado:", result`,
+      );
 
       return reply.send(result);
     },
@@ -116,6 +130,7 @@ export default async function financeiroRoutes(app: FastifyInstance) {
       return financeiroController.getVariacaoOrcadoRealizado();
     },
   );
+
   app.withTypeProvider<ZodTypeProvider>().get(
     "/financeiro/execucao",
     {
@@ -129,6 +144,28 @@ export default async function financeiroRoutes(app: FastifyInstance) {
     },
     async () => {
       return financeiroController.getExecucaoOrcadoRealizado();
+    },
+  );
+
+  app.withTypeProvider<ZodTypeProvider>().get(
+    "/financeiro/top-anual-excede-orcado/:ano",
+    {
+      schema: {
+        params: financeiroParamsAnoSchema,
+        description:
+          "Rota para obter os grupos que mais excederam o orçamento anual",
+        tags: ["Financeiro"],
+        response: {
+          200: excedenteAnualResponse,
+          400: apiErrorResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      const { ano } = request.params;
+      const result = await financeiroController.getTopAnualExcedeOrcado(ano);
+      console.log(`params: { ano: ${ano} }, "Resultado:", result`);
+      return reply.send(result);
     },
   );
 }

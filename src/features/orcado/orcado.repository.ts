@@ -19,8 +19,8 @@ export class OrcadoRepository {
 
   async getOrcadoByGrupo(grupo : string) {
     const result = await pool.query(`
-      SELECT SUM(valor) as total FROM fato_orcado fo JOIN grupo g ON fo.rubrica LIKE (g.id || '%')
-      WHERE g.id = $1
+      SELECT SUM(valor) as total FROM fato_orcado fo JOIN grupo g ON fo.id_rubrica LIKE (g.id_grupo || '%')
+      WHERE g.id_grupo = $1
     `, [grupo]);
     return Number(result.rows[0].total) || 0;
   }

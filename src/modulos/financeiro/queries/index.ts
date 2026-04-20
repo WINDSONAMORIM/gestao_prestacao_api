@@ -14,4 +14,5 @@ export const queries = {
   getResumoMensalPorGrupo: loadQuery("getResumoMensalPorGrupo.sql"),
   getResumoAnualPorSubGrupo: loadQuery("getResumoAnualPorSubGrupo.sql"),
   getTendenciaMensalPorGrupo: loadQuery("getTendenciaMensalPorGrupo.sql"),
+  getTopAnualExcedeOrcado: loadQuery("getTopAnualExcedeOrcado.sql"),
 };

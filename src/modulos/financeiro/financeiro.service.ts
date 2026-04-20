@@ -1,3 +1,4 @@
+import { AppError } from "../../utils/appError.js";
 import { FinanceiroRepository } from "./financeiro.repository.js";
 
 export class FinanceiroService {
@@ -20,7 +21,6 @@ export class FinanceiroService {
   }
 
   async getResumoAnualPorSubGrupo(ano:number, grupoId?: string) {
-    console.log(`Service Ano: ${ano} Grupo: ${grupoId}`)
     const result = await this.repository.getResumoAnualPorSubGrupo(ano, grupoId);
     if (!result || result.length === 0) {
       throw new Error("Nenhum resumo encontrado por subgrupo");
@@ -41,7 +41,6 @@ export class FinanceiroService {
     if (variacao === null || variacao === undefined) {
       throw new Error("Não foi possível calcular a variação entre orçado e realizado");
     }
-    console.log("Variação Service", variacao);
     return variacao;
   }
 
@@ -51,5 +50,13 @@ export class FinanceiroService {
       throw new Error("Não foi possível calcular a execução entre orçado e realizado");
     } 
     return execucao;
+  }
+
+  async getTopAnualExcedeOrcado(ano: number) {
+    const result = await this.repository.getTopAnualExcedeOrcado(ano);
+    if (!result || result.length === 0) {
+      throw new AppError("Nenhum grupo encontrado que excedeu o orçamento anual");
+    }
+    return result;
   }
 }

@@ -29,16 +29,16 @@ export const financeiroAnualResumoSchema = z.object({
 export const financeiroTendenciaMensalSchema = financeiroResponseSchema(
   z.array(
     z.object({
-      mes: z.string(),
+      mes: z.coerce.number().min(1).max(12),
       orcado: z.number(),
       realizado: z.number(),
     }),
   ),
 );
 
-export const financeiroParamsAnoSchema = z.object({
-  ano: z.coerce.number()
-});
+// export const financeiroParamsAnoSchema = z.object({
+//   ano: z.coerce.number()
+// });
 
 export const financeiroParamsMensalSchema = z.object({
   ano: z.coerce.number(),

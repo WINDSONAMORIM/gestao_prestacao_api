@@ -18,7 +18,6 @@ export class FinanceiroController {
   }
 
   async getResumoAnualPorSubGrupo(ano: number, grupoId: string) {
-    console.log(`Controller Ano: ${ano} Grupo: ${grupoId}`)
     const result = await this.service.getResumoAnualPorSubGrupo(ano, grupoId);
     return success(result);
   }
@@ -30,12 +29,16 @@ export class FinanceiroController {
 
   async getVariacaoOrcadoRealizado() {
     const variacao = await this.service.getVariacaoOrcadoRealizado();
-    console.log("Variação Controller", variacao);
     return success(variacao);
   }
 
   async getExecucaoOrcadoRealizado() {
     const execucao = await this.service.getExecucaoOrcadoRealizado();
     return success(execucao);
+  }
+
+  async getTopAnualExcedeOrcado(ano: number) {
+    const result = await this.service.getTopAnualExcedeOrcado(ano);
+    return success(result);
   }
 }
