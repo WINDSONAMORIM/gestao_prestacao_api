@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model dim_tempo {
+  id_data        Int              @id
+  ano            Int
+  mes            Int
+  nome_mes       String           @db.VarChar(20)
+  nome_mes_abrev String           @db.VarChar(5)
+  ano_mes        String           @db.VarChar(7)
+  fato_orcado    fato_orcado[]
+  fato_realizado fato_realizado[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model fato_orcado {
+  id_rubrica          String?
+  mes                 Int?
+  valor               Float?
+  id_rubrica_original String?
+  id_data             Int?
+  ano                 Int?
+  dim_tempo           dim_tempo? @relation(fields: [id_data], references: [id_data], onDelete: NoAction, onUpdate: NoAction, map: "fk_orcado_data")
+  rubrica             rubrica?   @relation(fields: [id_rubrica], references: [id_rubrica], onDelete: NoAction, onUpdate: NoAction, map: "fk_orcado_rubrica")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model fato_realizado {
+  cnpj       String?
+  id_rubrica String?
+  valor      Float?
+  PAGAMENTO  DateTime?  @db.Timestamp(6)
+  ano        Int?
+  mes        Int?
+  id_data    Int?
+  dim_tempo  dim_tempo? @relation(fields: [id_data], references: [id_data], onDelete: NoAction, onUpdate: NoAction, map: "fk_realizado_data")
+  rubrica    rubrica?   @relation(fields: [id_rubrica], references: [id_rubrica], onDelete: NoAction, onUpdate: NoAction, map: "fk_realizado_rubrica")
+
+  @@ignore
+}
+
+model grupo {
+  id_grupo  String     @id(map: "pk_grupo")
+  descricao String?
+  subgrupo  subgrupo[]
+}
+
+model rubrica {
+  id_rubrica     String           @id(map: "pk_rubrica")
+  descricao      String?
+  id_subgrupo    String?
+  fato_orcado    fato_orcado[]
+  fato_realizado fato_realizado[]
+  subgrupo       subgrupo?        @relation(fields: [id_subgrupo], references: [id_subgrupo], onDelete: NoAction, onUpdate: NoAction, map: "fk_rubrica_subgrupo")
+}
+
+model subgrupo {
+  id_subgrupo String    @id(map: "pk_subgrupo")
+  descricao   String?
+  id_grupo    String?
+  rubrica     rubrica[]
+  grupo       grupo?    @relation(fields: [id_grupo], references: [id_grupo], onDelete: NoAction, onUpdate: NoAction, map: "fk_subgrupo_grupo")
+}
