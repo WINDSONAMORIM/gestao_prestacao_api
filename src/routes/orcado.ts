@@ -64,4 +64,6 @@ export default async function orcadoRoutes(app: FastifyInstance) {
       return orcadoController.getOrcadoByGrupo(grupo);
     },
   );  
+
+  
 }

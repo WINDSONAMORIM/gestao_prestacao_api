@@ -20,7 +20,7 @@ export class FinanceiroRepository {
       ano,
       grupoId,
     ]);
-    console.log(result.rows);
+  
     return result.rows;
   }
 

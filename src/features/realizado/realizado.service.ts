@@ -11,4 +11,12 @@ export class RealizadoService {
     }
     return result;
   }
+
+  async getRealizadoMensal(ano:number, mes: number){
+    const result = await this.repository.getRealizadoMensal(ano, mes);
+    if(!result){
+      throw new AppError("Total mesnal não encontrado", 404)
+    }
+    return result;
+  }
 }

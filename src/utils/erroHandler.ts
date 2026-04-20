@@ -9,14 +9,13 @@ import { error } from "../utils/apiResponse.js";
 
 export async function errorHandler(app: FastifyInstance) {
   app.setErrorHandler((err, request, reply) => {
-    // 🔹 Erro controlado (seu)
+    
     if (err instanceof AppError) {
       return reply
         .status(err.statusCode)
         .send(error(err.message, err.statusCode));
     }
-
-    // 🔹 Erro do Zod (entrada inválida)
+    
     if (err instanceof ZodError) {
       return reply.status(400).send({
         statusCode: 400,
@@ -26,7 +25,6 @@ export async function errorHandler(app: FastifyInstance) {
       });
     }
 
-    // 🔹 Erro de validação do Fastify (params/query/body)
     if (isValidationError(err)) {
       const issues =
         err.validation?.map((issue: any) => ({
@@ -43,7 +41,6 @@ export async function errorHandler(app: FastifyInstance) {
       });
     }
 
-    // 🔹 Erro de serialização (RESPOSTA não bate com schema)
     if (isResponseSerializationError(err)) {
       const cause = (err as any).cause;
 
@@ -52,14 +49,13 @@ export async function errorHandler(app: FastifyInstance) {
           statusCode: 400,
           success: false,
           message: "Erro na resposta da API",
-          data: cause.issues, // 👈 AQUI estava o seu problema antes
+          data: cause.issues,
         });
       }
 
       return reply.status(500).send(error("Erro ao serializar resposta"));
     }
 
-    // 🔹 Fallback
     console.error(err);
 
     return reply.status(500).send(error("Erro interno do servidor"));

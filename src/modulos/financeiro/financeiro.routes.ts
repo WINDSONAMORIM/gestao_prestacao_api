@@ -55,7 +55,6 @@ export default async function financeiroRoutes(app: FastifyInstance) {
     },
     async (request, reply) => {
       const { ano, mes } = request.params;
-      console.log(`paramns: ${ano} - ${mes}`)
       const result = await financeiroController.getResumoMensalPorGrupo(
         ano,
         mes,
@@ -83,10 +82,6 @@ export default async function financeiroRoutes(app: FastifyInstance) {
         ano,
         grupoId,
       );
-      console.log(
-        `params: { ano: ${ano}, grupoId: ${grupoId} }, "Resultado:", result`,
-      );
-
       return reply.send(result);
     },
   );
@@ -161,7 +156,6 @@ export default async function financeiroRoutes(app: FastifyInstance) {
     async (request, reply) => {
       const { ano } = request.params;
       const result = await financeiroController.getTopAnualExcedeOrcado(ano);
-      console.log(`params: { ano: ${ano} }, "Resultado:", result`);
       return reply.send(result);
     },
   );

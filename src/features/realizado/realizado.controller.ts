@@ -8,4 +8,9 @@ export class RealizadoController {
         const result = await this.service.getTotalRealizado();
         return success({ total: result });
     }
+
+    async getRealizadoMensal(ano: number, mes: number) {
+        const result = await this.service.getRealizadoMensal(ano, mes)
+        return success({total: result});
+    }
 }
