@@ -9,6 +9,11 @@ export class OrcadoController {
     return  success({total:result });
   }
 
+  async getOrcadoMensal(ano:number, mes:number){
+    const result = await this.service.getOrcadoMensal(ano, mes)
+        return success({total: result});
+  }
+
   async getGrupo() {
     const result = await this.service.getGrupo();
     return success(result);

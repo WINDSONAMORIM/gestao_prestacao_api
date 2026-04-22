@@ -14,8 +14,8 @@ model dim_tempo {
   nome_mes       String           @db.VarChar(20)
   nome_mes_abrev String           @db.VarChar(5)
   ano_mes        String           @db.VarChar(7)
-  fato_orcado    fato_orcado[]
-  fato_realizado fato_realizado[]
+  fato_orcado    fato_orcado[] @ignore
+  fato_realizado fato_realizado[] @ignore
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -57,8 +57,8 @@ model rubrica {
   id_rubrica     String           @id(map: "pk_rubrica")
   descricao      String?
   id_subgrupo    String?
-  fato_orcado    fato_orcado[]
-  fato_realizado fato_realizado[]
+  fato_orcado    fato_orcado[] @ignore
+  fato_realizado fato_realizado[] @ignore
   subgrupo       subgrupo?        @relation(fields: [id_subgrupo], references: [id_subgrupo], onDelete: NoAction, onUpdate: NoAction, map: "fk_rubrica_subgrupo")
 }
 

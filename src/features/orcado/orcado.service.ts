@@ -14,6 +14,14 @@ export class OrcadoService {
     return result;
   }
 
+  async getOrcadoMensal(ano: number, mes:number){
+    const result = await this.repository.getOrcadoMensal(ano, mes);
+     if(!result){
+      throw new AppError("Total mesnal não encontrado", 404)
+    }
+    return result;
+  }
+
   async getGrupo() {
     const result = await this.repository.getGrupo();
     if (!result) {

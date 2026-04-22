@@ -8,6 +8,9 @@ import { OrcadoRepository } from "../features/orcado/orcado.repository.js";
 import { orcadoGrupoSchema, orcadoResponseSchema, orcadoTotalSchema } from "../features/orcado/orcado.schema.js";
 import z from "zod";
 
+import { financeiroParamsMensalSchema } from "../modulos/financeiro/financeiro.schema.js";
+import { realizadoTotalSchema } from "../features/realizado/realizado.schema.js";
+
 const orcadoRepository = new OrcadoRepository();
 const orcadoService = new OrcadoService(orcadoRepository);
 const orcadoController = new OrcadoController(orcadoService);
@@ -18,7 +21,7 @@ export default async function orcadoRoutes(app: FastifyInstance) {
     {
       schema: {
         description: "Retorna o valor total orçado",
-        tags: ["Orçado"],
+        tags: ["Orcado"],
         response: {
           200: orcadoTotalSchema,
         },
@@ -28,6 +31,25 @@ export default async function orcadoRoutes(app: FastifyInstance) {
       return orcadoController.getTotalOrcado();
     },
   );
+
+  app.withTypeProvider<ZodTypeProvider>().get(
+    "/orcado-mensal/:ano/:mes",
+    {
+      schema: {
+        params: financeiroParamsMensalSchema,
+        description: "Retorna o valor total orcado mensal",
+        tags: ["Orcado"],
+        response: {
+          200: realizadoTotalSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      const {ano, mes} = request.params;
+      const result = await orcadoController.getOrcadoMensal(ano, mes);
+      return reply.send(result)
+    },
+  );  
 
   app.withTypeProvider<ZodTypeProvider>().get(
     "/grupo",
@@ -63,7 +85,5 @@ export default async function orcadoRoutes(app: FastifyInstance) {
       const { grupo } = req.params;
       return orcadoController.getOrcadoByGrupo(grupo);
     },
-  );  
-
-  
+  );   
 }
