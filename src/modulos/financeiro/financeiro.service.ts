@@ -1,32 +1,42 @@
+import { ParamsAnual, ParamsAnualGrupo, ParamsMensal, ParamsMensalGrupo } from "../../schemas/paramsShema.js";
 import { AppError } from "../../utils/appError.js";
 import { FinanceiroRepository } from "./financeiro.repository.js";
 
 export class FinanceiroService {
   constructor(private repository: FinanceiroRepository) {}
 
-  async getResumoAnualPorGrupo(ano: number) {
-    const result = await this.repository.getResumoAnualPorGrupo(ano);
+  async getResumoAnualPorGrupo(params: ParamsAnual) {
+    const result = await this.repository.getResumoAnualPorGrupo(params);
     if (!result || result.length === 0) {
-      throw new AppError("Nenhum resumo encontrado por grupo");
+      throw new AppError("Nenhum resumo anual encontrado por grupo");
     }
     return result;
   }
 
-  async getResumoMensalPorGrupo(ano: number, mes: number) {
-    const result = await this.repository.getResumoMensalPorGrupo(ano, mes);
+  async getResumoAnualPorSubGrupo(params: ParamsAnualGrupo) {
+    const result = await this.repository.getResumoAnualPorSubGrupo(params);
     if (!result || result.length === 0) {
-      throw new AppError("Nenhum resumo encontrado por grupo");
+      throw new AppError("Nenhum resumo anual encontrado por subgrupo");
     }
     return result;
   }
 
-  async getResumoAnualPorSubGrupo(ano:number, grupoId?: string) {
-    const result = await this.repository.getResumoAnualPorSubGrupo(ano, grupoId);
+  async getResumoMensalPorGrupo(params: ParamsMensal) {
+    const result = await this.repository.getResumoMensalPorGrupo(params);
     if (!result || result.length === 0) {
-      throw new AppError("Nenhum resumo encontrado por subgrupo");
+      throw new AppError("Nenhum resumo mensal encontrado por grupo");
     }
     return result;
   }
+
+  async getResumoMensalPorSubgrupo(params: ParamsMensalGrupo){
+    const result = await this.repository.getResumoMensalPorSubGrupo(params);
+    if(!result || result.length === 0){
+      throw new AppError("Nenhum resumo mensal encontrado por subgrupo")
+    }
+    return result
+  }
+
 
   async getTendenciaMensalPorGrupo(grupoId: string) {
     const result = await this.repository.getTendenciaMensalPorGrupo(grupoId);

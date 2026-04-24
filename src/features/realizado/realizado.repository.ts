@@ -1,26 +1,15 @@
-import { pool } from "../../lib/db.js";
 import { prisma } from "../../lib/prisma.js";
-
-type Total = {
-    total: number;
-};
+import { ParamsAnual, ParamsMensal } from "../../schemas/paramsShema.js";
+import { RealizadoQuery } from "./realizado.query.js";
 
 export class RealizadoRepository {
-    async getTotalRealizado() {
-        const result = await pool.query(`
-      SELECT COALESCE(SUM(valor), 0) as total FROM fato_realizado
-    `);
-        return Number(result.rows[0].total) || 0;
-    }
+    constructor(private query: RealizadoQuery){}
 
-    async getRealizadoMensal(ano: number, mes: number) {
-        const result = await prisma.$queryRaw<Total[]>`
-             SELECT COALESCE(SUM(r.valor), 0) as total
-                FROM fato_realizado r
-                JOIN dim_tempo dt ON dt.id_data = r.id_data
-                WHERE dt.ano = ${ano}
-                AND dt.mes = ${mes}`;
-
-        return result[0]?.total ?? 0
+    async getTotalRealizado(params: ParamsAnual) {
+        return await this.query.realizadoAnualQuery(params)
+    }       
+        
+    async getRealizadoMensal(params: ParamsMensal) {
+        return await this.query.RealizadoMensalQuery(params)    
+        }
     }
-}

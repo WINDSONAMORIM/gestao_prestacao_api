@@ -1,26 +1,26 @@
-import { success } from "../../utils/apiResponse.js";
+import { ParamsAnual, ParamsMensal } from "../../schemas/paramsShema.js";
 import { OrcadoService } from "./orcado.service.js";
 
 export class OrcadoController {
   constructor(private service: OrcadoService) {}
   
-  async getTotalOrcado() {
-    const result = await this.service.getTotalOrcado();
-    return  success({total:result });
+  async getTotalOrcado(params: ParamsAnual) {
+    const result = await this.service.getTotalOrcado(params);
+    return  result;
   }
 
-  async getOrcadoMensal(ano:number, mes:number){
-    const result = await this.service.getOrcadoMensal(ano, mes)
-        return success({total: result});
+  async getOrcadoMensal(params: ParamsMensal){
+    const result = await this.service.getOrcadoMensal(params)
+        return result;
   }
 
-  async getGrupo() {
-    const result = await this.service.getGrupo();
-    return success(result);
-  }
-
-  async getOrcadoByGrupo(grupo: string) {
-    const result = await this.service.getOrcadoByGrupo(grupo);
-    return success({ total: result });
-  }
 }
+  // async getGrupo() {
+  //   const result = await this.service.getGrupo();
+  //   return success(result);
+  // }
+
+  // async getOrcadoByGrupo(grupo: string) {
+  //   const result = await this.service.getOrcadoByGrupo(grupo);
+  //   return success({ total: result });
+  // }

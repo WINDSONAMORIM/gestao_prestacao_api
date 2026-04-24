@@ -39,8 +39,8 @@ await app.register(fastifyApiReference, {
   routePrefix: "/docs",
 });
 
-app.register(import("./routes/orcado.js"));
-app.register(import("./routes/realizado.js"));
+app.register(import("./features/orcado/orcado.routes.js"));
+app.register(import("./features/realizado/realizado.routes.js"));
 app.register(import("./modulos/financeiro/financeiro.routes.js"));
 
 await errorHandler(app);

@@ -1,16 +1,16 @@
-import { success } from "../../utils/apiResponse.js";
+import { ParamsAnual, ParamsMensal } from "../../schemas/paramsShema.js";
 import { RealizadoService } from "./realizado.service.js";
 
 export class RealizadoController {
     constructor(private service: RealizadoService) {}
 
-    async getTotalRealizado() { 
-        const result = await this.service.getTotalRealizado();
-        return success({ total: result });
+    async getTotalRealizado(params: ParamsAnual) { 
+        const result = await this.service.getTotalRealizado(params);
+        return result;
     }
 
-    async getRealizadoMensal(ano: number, mes: number) {
-        const result = await this.service.getRealizadoMensal(ano, mes)
-        return success({total: result});
+    async getRealizadoMensal(params: ParamsMensal) {
+        const result = await this.service.getRealizadoMensal(params)
+        return result;
     }
 }

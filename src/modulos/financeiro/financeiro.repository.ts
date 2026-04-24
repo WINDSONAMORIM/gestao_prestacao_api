@@ -1,28 +1,29 @@
 import { pool } from "../../lib/db.js";
+import { ParamsAnual, ParamsAnualGrupo, ParamsMensal, ParamsMensalGrupo } from "../../schemas/paramsShema.js";
+import { resumoAnualPorGrupo } from "./queries/getResumoAnualPorGrupo.js";
+import { resumoAnualPorSubgrupo } from "./queries/getResumoAnualPorSubGrupo.js";
+import { resumoMensalPorGrupo } from "./queries/getResumoMensalPorGrupo.js";
+import { resumoMensalPorSubgrupo } from "./queries/getResumoMensalPorSubGrupo.js";
 import { queries } from "./queries/index.js";
 
 export class FinanceiroRepository {
-  async getResumoAnualPorGrupo(ano: number) {
-    const result = await pool.query(queries.getResumoAnualPorGrupo, [ano]);
-    return result.rows;
+  async getResumoAnualPorGrupo(params: ParamsAnual) {    
+    return resumoAnualPorGrupo(params);
   }
 
-  async getResumoMensalPorGrupo(ano: number, mes: number) {
-    const result = await pool.query(queries.getResumoMensalPorGrupo, [
-      ano,
-      mes,
-    ]);
-    return result.rows;
+  async getResumoMensalPorGrupo(params: ParamsMensal) {
+    return resumoMensalPorGrupo(params)
+   }
+
+  async getResumoAnualPorSubGrupo(params: ParamsAnualGrupo) {
+    return resumoAnualPorSubgrupo(params)
   }
 
-  async getResumoAnualPorSubGrupo(ano: number, grupoId?: string) {
-    const result = await pool.query(queries.getResumoAnualPorSubGrupo, [
-      ano,
-      grupoId,
-    ]);
+  async getResumoMensalPorSubGrupo(params: ParamsMensalGrupo){
+    return resumoMensalPorSubgrupo(params)
+  }
+
   
-    return result.rows;
-  }
 
   async getTendenciaMensalPorGrupo(grupoId: string) {
     const result = await pool.query(queries.getTendenciaMensalPorGrupo, [

@@ -3,23 +3,29 @@ import { FinanceiroService } from "./financeiro.service.js";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { financeiroParamsGrupoSchema } from "./financeiro.schema.js";
 import z from "zod";
+import { ParamsAnual, ParamsAnualGrupo, ParamsMensal, ParamsMensalGrupo } from "../../schemas/paramsShema.js";
 
 export class FinanceiroController {
   constructor(private service: FinanceiroService) {}
 
-  async getResumoAnualPorGrupo(ano: number) {
-    const result = await this.service.getResumoAnualPorGrupo(ano);
-    return success(result);
+  async getResumoAnualPorGrupo(params: ParamsAnual) {
+    const result = await this.service.getResumoAnualPorGrupo(params);
+    return result;
   }
 
-  async getResumoMensalPorGrupo(ano: number, mes: number) {
-    const result = await this.service.getResumoMensalPorGrupo(ano, mes);
-    return success(result);
+  async getResumoMensalPorGrupo(params: ParamsMensal) {
+    const result = await this.service.getResumoMensalPorGrupo(params);
+    return result;
   }
 
-  async getResumoAnualPorSubGrupo(ano: number, grupoId: string) {
-    const result = await this.service.getResumoAnualPorSubGrupo(ano, grupoId);
-    return success(result);
+  async getResumoAnualPorSubGrupo(params: ParamsAnualGrupo) {
+    const result = await this.service.getResumoAnualPorSubGrupo(params);
+    return result;
+  }
+
+  async getResumoMensalPorSubGrupo(params: ParamsMensalGrupo) {
+    const result = await this.service.getResumoMensalPorSubgrupo(params);
+    return result;
   }
 
   async getTendenciaMensalPorGrupo(grupoId: string) {

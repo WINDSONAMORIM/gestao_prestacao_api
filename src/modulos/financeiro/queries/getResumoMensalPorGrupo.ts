@@ -1,4 +1,10 @@
-WITH orcado AS (
+import { prisma } from "../../../lib/prisma.js";
+import { ParamsMensal } from "../../../schemas/paramsShema.js";
+import { ResponseAnaliseOrcamentariaAnualPorGrupo } from "../../../schemas/responseSchema.js";
+
+export const resumoMensalPorGrupo = async(params:ParamsMensal): Promise<ResponseAnaliseOrcamentariaAnualPorGrupo[]> => {
+  const response = await prisma.$queryRaw<ResponseAnaliseOrcamentariaAnualPorGrupo[]>`
+  WITH orcado AS (
   SELECT 
     sg.id_grupo,
     SUM(o.valor) AS total_orcado
@@ -6,8 +12,8 @@ WITH orcado AS (
   JOIN dim_tempo dt ON dt.id_data = o.id_data
   JOIN rubrica rb ON rb.id_rubrica = o.id_rubrica
   JOIN subgrupo sg ON sg.id_subgrupo = rb.id_subgrupo
-  WHERE dt.ano = $1
-    AND dt.mes = $2
+  WHERE dt.ano = ${params.ano}
+    AND dt.mes = ${params.mes}
   GROUP BY sg.id_grupo
 ),
 realizado AS (
@@ -18,8 +24,8 @@ realizado AS (
   JOIN dim_tempo dt ON dt.id_data = r.id_data
   JOIN rubrica rb ON rb.id_rubrica = r.id_rubrica
   JOIN subgrupo sg ON sg.id_subgrupo = rb.id_subgrupo
-  WHERE dt.ano = $1
-    AND dt.mes = $2
+  WHERE dt.ano = ${params.ano}
+    AND dt.mes = ${params.mes}
   GROUP BY sg.id_grupo
 )
 SELECT 
@@ -30,4 +36,11 @@ SELECT
 FROM grupo g
 LEFT JOIN orcado o ON o.id_grupo = g.id_grupo
 LEFT JOIN realizado r ON r.id_grupo = g.id_grupo
-ORDER BY g.id_grupo;
+ORDER BY g.id_grupo`;
+return response.map(item => ({
+    id_grupo: item.id_grupo,
+    descricao: item.descricao,
+    orcado: item.orcado,
+    realizado: item.realizado
+}));
+}
