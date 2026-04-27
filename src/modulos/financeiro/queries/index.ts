@@ -13,6 +13,6 @@ export const queries = {
   // getResumoAnualPorGrupo: loadQuery("getResumoAnualPorGrupo.sql"),
   // getResumoMensalPorGrupo: loadQuery("getResumoMensalPorGrupo.sql"),
   // getResumoAnualPorSubGrupo: loadQuery("getResumoAnualPorSubGrupo.sql"),
-  getTendenciaMensalPorGrupo: loadQuery("getTendenciaMensalPorGrupo.sql"),
+  // getTendenciaMensalPorGrupo: loadQuery("getTendenciaMensalPorGrupo.sql"),
   getTopAnualExcedeOrcado: loadQuery("getTopAnualExcedeOrcado.sql"),
 };
