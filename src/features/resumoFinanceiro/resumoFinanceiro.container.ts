@@ -1,6 +1,6 @@
-import { FinanceiroController } from "./financeiro.controller.js";
-import { FinanceiroRepository } from "./financeiro.repository.js";
-import { FinanceiroService } from "./financeiro.service.js";
+import { FinanceiroController } from "./resumoFinanceiro.controller.js";
+import { FinanceiroRepository } from "./resumoFinanceiro.repository.js";
+import { FinanceiroService } from "./resumoFinanceiro.service.js";
 
 const financeiroRepository = new FinanceiroRepository()
 const financeiroService = new FinanceiroService(financeiroRepository)

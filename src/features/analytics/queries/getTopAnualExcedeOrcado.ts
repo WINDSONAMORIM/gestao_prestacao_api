@@ -1,8 +1,9 @@
 import { prisma } from "../../../lib/prisma.js"
 import { ParamsAnual } from "../../../schemas/paramsShema.js"
+import { ResponseTopExcedeOrcado } from "../../../schemas/responseSchema.js";
 
-export const getTopAnualExcedeOrcado = async(params:ParamsAnual): Promise<any[]> => {
-  const response = await prisma.$queryRaw<any[]>`
+export const topAnualExcedeOrcado = async(params:ParamsAnual): Promise<ResponseTopExcedeOrcado[]> => {
+  const response = await prisma.$queryRaw<ResponseTopExcedeOrcado[]>`
     WITH orcado AS (
       SELECT 
         sg.id_grupo,
@@ -11,7 +12,7 @@ export const getTopAnualExcedeOrcado = async(params:ParamsAnual): Promise<any[]>
       JOIN dim_tempo dt ON dt.id_data = o.id_data
       JOIN rubrica rb ON rb.id_rubrica = o.id_rubrica
       JOIN subgrupo sg ON sg.id_subgrupo = rb.id_subgrupo
-      WHERE dt.ano = ${ params.ano }
+      WHERE dt.ano = ${params.ano}
       GROUP BY sg.id_grupo
     ),
     realizado AS (
@@ -22,7 +23,7 @@ export const getTopAnualExcedeOrcado = async(params:ParamsAnual): Promise<any[]>
       JOIN dim_tempo dt ON dt.id_data = r.id_data
       JOIN rubrica rb ON rb.id_rubrica = r.id_rubrica
       JOIN subgrupo sg ON sg.id_subgrupo = rb.id_subgrupo
-      WHERE dt.ano = ${ params.ano }
+      WHERE dt.ano = ${params.ano}
       GROUP BY sg.id_grupo
     )
     SELECT 
@@ -35,7 +36,7 @@ export const getTopAnualExcedeOrcado = async(params:ParamsAnual): Promise<any[]>
           AND r.total_realizado > 0 THEN 100
       WHEN COALESCE(o.total_orcado, 0) = 0 
           THEN 0
-      ELSE ROUND(((r.total_realizado / o.total_orcado) * 100)::numeric, 2)
+      ELSE ROUND(((r.total_realizado / o.total_orcado) * 100)::numeric, 2)::float
     END AS perc
     FROM realizado r
     LEFT JOIN orcado o ON o.id_grupo = r.id_grupo

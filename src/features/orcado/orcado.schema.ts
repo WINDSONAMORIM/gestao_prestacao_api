@@ -22,37 +22,3 @@ export const orcadoMensalRouteSchema = {
     }
   }
 };
-
-// export const orcadoParamsAnoSchema = z.object({
-//   ano: z.coerce.number()
-// // });
-
-// export const orcadoResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
-//   z.object({
-//     statusCode: z.number(),
-//     success: z.boolean(),
-//     message: z.string(),
-//     data: dataSchema,
-//   });
-
-// export const orcadoTotalSchema = 
-//   z.object({
-//     total: z.number(),
-//   })
-
-// export const orcadoGrupoSchema = orcadoResponseSchema(
-//   z.array(
-//     z.object({
-//       id: z.string(),
-//       descricao: z.string(),
-//     })
-//   )
-// );
-
-// export const apiResponseTotalSchema = z.object({
-//   statusCode: z.number(),
-//   success: z.boolean(),
-//   message: z.string(),
-//   data: orcadoTotalSchema
-// });
-

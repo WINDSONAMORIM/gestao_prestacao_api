@@ -41,7 +41,9 @@ await app.register(fastifyApiReference, {
 
 app.register(import("./features/orcado/orcado.routes.js"));
 app.register(import("./features/realizado/realizado.routes.js"));
-app.register(import("./modulos/financeiro/financeiro.routes.js"));
+app.register(import("./features/resumoFinanceiro/resumoFinanceiro.routes.js"));
+app.register(import("./features/tendencia/tendencia.routes.js"))
+app.register(import("./features/analytics/analytics.routes.js"))
 
 await errorHandler(app);
 

@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { paramsAnualGrupoSchema, paramsAnualSchema, paramsMensalGrupoSchema, paramsMensalSchema } from "../../schemas/paramsShema.js";
-import { apiResponsePorGrupoSchema, apiResponsePorSubGrupoSchema } from "../../schemas/responseSchema.js";
+import { paramsAnualGrupoSchema, paramsAnualSchema, paramsAnualSubGrupoSchema, paramsMensalGrupoSchema, paramsMensalSchema, paramsMensalSubGrupoSchema } from "../../schemas/paramsShema.js";
+import { apiResponsePorGrupoSchema, apiResponsePorRubricaSchema, apiResponsePorSubGrupoSchema } from "../../schemas/responseSchema.js";
 
 export const financeiroAnualGrupoRouteSchema = {
   schema: {
@@ -46,6 +46,28 @@ export const financeiroMensalSubgrupoRouteSchema = {
   }
 }
 
+export const financeiroAnualRubricaRouteSchema = {
+  schema: {
+    params: paramsAnualSubGrupoSchema,
+    description: "Rota para obter o resumo anual por rubrica financeiro",
+    tags: ["Financeiro"],
+    response: {
+      200: apiResponsePorRubricaSchema
+    }
+  }
+}
+
+export const financeiroMensalRubricaRouteSchema = {
+  schema: {
+    params: paramsMensalSubGrupoSchema,
+    description: "Rota para obter o resumo mensal por subgrupo financeiro",
+    tags: ["Financeiro"],
+    response: {
+      200: apiResponsePorRubricaSchema
+    }
+  }
+}
+
 export const financeiroResponseSchema = <T extends z.ZodTypeAny>(
   dataSchema: T,
 ) =>
@@ -76,15 +98,11 @@ export const financeiroTendenciaMensalSchema = financeiroResponseSchema(
   z.array(
     z.object({
       mes: z.coerce.number().min(1).max(12),
-      orcado: z.number(),
-      realizado: z.number(),
+      orcado: z.coerce.number(),
+      realizado: z.coerce.number(),
     }),
   ),
 );
-
-// export const financeiroParamsAnoSchema = z.object({
-//   ano: z.coerce.number()
-// });
 
 export const financeiroParamsMensalSchema = z.object({
   ano: z.coerce.number(),
