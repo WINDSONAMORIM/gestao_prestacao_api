@@ -51,7 +51,7 @@ export default async function financeiroRoutes(app: FastifyInstance) {
   )
 
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/financeiro/resumo-anual-rubrica/:ano/:mes/:id_grupo/:id_subgrupo",
+    "/financeiro/resumo-anual-rubrica/:ano/:id_grupo/:id_subgrupo",
     financeiroAnualRubricaRouteSchema,
     async (request, reply) => {
       const result = await financeiroController.getResumoAnualPorRubrica(request.params)
@@ -60,7 +60,7 @@ export default async function financeiroRoutes(app: FastifyInstance) {
   )
 
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/financeiro/resumo-mensal-rubrica/:ano/:mes/:id_grupo/:id_rubrica",
+    "/financeiro/resumo-mensal-rubrica/:ano/:mes/:id_grupo/:id_subgrupo",
     financeiroMensalRubricaRouteSchema,
     async (request, reply) => {
       const result = await financeiroController.getResumoMensalPorRubrica(request.params)

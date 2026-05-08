@@ -6,7 +6,6 @@ export class AnalyticsController {
 
     async getTopAnualExcedeOrcado(params: ParamsAnual) {
         const result = await this.service.getTopAnualExcedeOrcado(params);
-        result.map((i)=>{console.log(`Controller: ${i.id_grupo} - ${i.orcado} - ${i.realizado} - ${i.diferenca} - ${i.perc}`)})
         return result;
     }
 
