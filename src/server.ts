@@ -31,6 +31,15 @@ await app.register(swagger, {
       description:
         "API para gerenciamento de prestação de contas, incluindo orçamentos, despesas e receitas.",
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
   },
   transform: jsonSchemaTransform,
 });
@@ -44,6 +53,7 @@ app.register(import("./features/realizado/realizado.routes.js"));
 app.register(import("./features/resumoFinanceiro/resumoFinanceiro.routes.js"));
 app.register(import("./features/tendencia/tendencia.routes.js"))
 app.register(import("./features/analytics/analytics.routes.js"))
+app.register(import("./clients/myFlux/myflux.routes.js"))
 
 await errorHandler(app);
 
