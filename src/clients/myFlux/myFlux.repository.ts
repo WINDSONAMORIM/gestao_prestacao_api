@@ -4,6 +4,10 @@ interface LoginResponse {
   token: string;
 }
 
+interface TitleResposnse{
+  titulo: string;
+}
+
 export class MyFluxRepository {
   private baseUrl: string;
   
@@ -42,10 +46,10 @@ export class MyFluxRepository {
     }
   }
 
-  async getTitle(processId: ParamsGetTitle, token: string): Promise<any> {
-    console.log(processId.title)
+  async getTitle(processId: ParamsGetTitle, token: string): Promise<TitleResposnse> {
+    console.log(processId.id)
     try {      
-      const response = await fetch(`${this.baseUrl}/processos/${processId.title}`, {
+      const response = await fetch(`${this.baseUrl}/processos/${processId.id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -58,18 +62,47 @@ export class MyFluxRepository {
         throw new Error(`Erro ao buscar processo: ${response}`);
       }
 
-      const data = await response.json();
+      const data : TitleResposnse = await response.json();
 
-      if (data && data.titulo) {
-        console.log(`Process: ${processId} Data: ${data.titulo}`);
-        const fullTitle = data.titulo;
-        const partes = fullTitle.split("_");
-        const tituloCurto = `${partes[0]}_${partes[1]}`;
-        return tituloCurto;
+      if (!data) {
+        throw new Error('Title not found'); 
       }
+      
+      console.log(`Process: ${processId.id} Data: ${data.titulo}`);
+      const fullTitle = data.titulo;
+      const partes = fullTitle.split("_");
+      const titulo = `${partes[0]}_${partes[1]}`;
+      return { titulo };
+
     } catch (error) {
       console.error("Erro em getTitle:", error);
       throw error;
     }
   }
-}
+
+  async downloaderProcess(data: number, token: string): Promise<any>{
+    try {
+      const response = await fetch(`${this.baseUrl}/processos/${data}/empacotar`,{
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        });
+
+      if (!response.ok) {
+        throw new Error(`Erro ao buscar processo: ${response}`);
+      }
+      console.log(`repository empacotar paramsn ${data}`)
+      console.log(`repository empacotar response${JSON.stringify(response, null, 2)}`)
+      
+      const result = await response.json()
+      
+      return result
+      } catch (error) {
+      console.error("Erro em downloaderProcess:", error);
+      throw error;      
+    }
+  }
+}  
