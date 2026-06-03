@@ -5,6 +5,7 @@ import { MyfluxService } from "./myFlux.service.js";
 import { MyfluxController } from "./myFlux.controller.js";
 import { myFluxLoginRouteSchema, processoSchema } from "./myFlux.schema.js";
 import { success } from "../../utils/apiResponse.js";
+import { ZipService } from "../../shared/zip/zip.service.js";
 
 const repository = new MyFluxRepository();
 const service = new MyfluxService(repository);
@@ -90,6 +91,8 @@ export default async function myFluxRouter(app: FastifyInstance) {
         const {id} = request.params;
 
         const result = await controller.downloaderProcess(id, token);
+        const zip = new ZipService(id);
+        zip.padronizaProcesso
         // console.log(`route empacotar params ${id}`)
         // console.log(`route empacotar ${result}`)
         return reply.send(result)
