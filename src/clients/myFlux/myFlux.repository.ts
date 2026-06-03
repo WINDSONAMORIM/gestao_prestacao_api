@@ -94,8 +94,8 @@ export class MyFluxRepository {
       if (!response.ok) {
         throw new Error(`Erro ao buscar processo: ${response}`);
       }
-      console.log(`repository empacotar paramsn ${data}`)
-      console.log(`repository empacotar response${JSON.stringify(response, null, 2)}`)
+      // console.log(`repository empacotar paramsn ${data}`)
+      // console.log(`repository empacotar response${JSON.stringify(response, null, 2)}`)
       
       const result = await response.json()
       

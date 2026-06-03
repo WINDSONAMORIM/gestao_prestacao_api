@@ -17,6 +17,7 @@
     "@prisma/client": "^5.22.0",
     "@scalar/fastify-api-reference": "^1.49.3",
     "@types/pg": "^8.20.0",
+    "adm-zip": "^0.5.17",
     "cors": "^2.8.6",
     "fastify": "^5.8.2",
     "fastify-type-provider-zod": "^6.1.0",
@@ -26,6 +27,7 @@
     "zod-to-json-schema": "^3.25.1"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.8",
     "@types/cors": "^2.8.19",
     "@types/node": "^25.6.0",
     "dotenv": "^17.4.2",

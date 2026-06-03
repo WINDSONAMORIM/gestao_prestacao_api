@@ -1,3 +1,4 @@
+import { ZipService } from "../../shared/zip/zip.service.js";
 import { MyFluxRepository } from "./myFlux.repository.js";
 import { ParammsLogin, ParamsGetTitle } from "./myFlux.schema.js";
 
@@ -14,10 +15,11 @@ export class MyfluxService {
     console.log("Service: ", +result);
     return result;
   }
-
+  
   async downloaderProcess(processo: number, token: string){
     const result = await this.repository.downloaderProcess(processo, token);
-    console.log(`service empacotar ${JSON.stringify(result, null, 2)}`)
+    const zip = new ZipService(result).padronizaProcesso();
+    // console.log(`service empacotar ${JSON.stringify(result, null, 2)}`)
     return result;
   }
 }

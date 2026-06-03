@@ -18,7 +18,7 @@ export class MyfluxController {
 
    async downloaderProcess(processo: number, token: string) {
     const result = await this.service.downloaderProcess(processo, token);
-    console.log(`controller empacotar ${JSON.stringify(result, null, 2)}`)
+    // console.log(`controller empacotar ${JSON.stringify(result, null, 2)}`)
     return result;
   }
 }

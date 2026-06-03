@@ -3,7 +3,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { MyFluxRepository } from "./myFlux.repository.js";
 import { MyfluxService } from "./myFlux.service.js";
 import { MyfluxController } from "./myFlux.controller.js";
-import { myFluxLoginRouteSchema, myFluxLoginSchema, processoSchema, processosSchema } from "./myFlux.schema.js";
+import { myFluxLoginRouteSchema, processoSchema } from "./myFlux.schema.js";
 import { success } from "../../utils/apiResponse.js";
 
 const repository = new MyFluxRepository();
@@ -90,8 +90,8 @@ export default async function myFluxRouter(app: FastifyInstance) {
         const {id} = request.params;
 
         const result = await controller.downloaderProcess(id, token);
-        console.log(`route empacotar params ${id}`)
-        console.log(`route empacotar ${result}`)
+        // console.log(`route empacotar params ${id}`)
+        // console.log(`route empacotar ${result}`)
         return reply.send(result)
       } catch (error: any) {
          console.error("Erro na rota empacotar:", error);
