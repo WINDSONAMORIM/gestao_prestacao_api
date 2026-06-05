@@ -1,14 +1,16 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { MyFluxRepository } from "./myFlux.repository.js";
-import { MyfluxService } from "./myFlux.service.js";
+// import { MyFluxRepository } from "./myFlux.repository.js";
+// import { MyfluxService } from "./myFlux.service.js";
 import { MyfluxController } from "./myFlux.controller.js";
 import { myFluxLoginRouteSchema, processoSchema } from "./myFlux.schema.js";
 import { success } from "../../utils/apiResponse.js";
 import { ZipService } from "../../shared/zip/zip.service.js";
+import { MyFluxService } from "./myFlux.repository.js";
 
-const repository = new MyFluxRepository();
-const service = new MyfluxService(repository);
+// const repository = new MyFluxRepository();
+// const service = new MyfluxService(repository);
+const service = new MyFluxService();
 const controller = new MyfluxController(service);
 
 export default async function myFluxRouter(app: FastifyInstance) {
@@ -16,7 +18,6 @@ export default async function myFluxRouter(app: FastifyInstance) {
     "/myFlux-login",
     myFluxLoginRouteSchema,
     async (request, reply) => {
-      console.log("rota: " + request.body);
       const result = await controller.login(request.body);
       return reply.send(success(result));
     },
@@ -91,10 +92,8 @@ export default async function myFluxRouter(app: FastifyInstance) {
         const {id} = request.params;
 
         const result = await controller.downloaderProcess(id, token);
-        const zip = new ZipService(id);
-        zip.padronizaProcesso
-        // console.log(`route empacotar params ${id}`)
-        // console.log(`route empacotar ${result}`)
+        const zipService = new ZipService(result);
+        await zipService.padronizaProcesso();
         return reply.send(result)
       } catch (error: any) {
          console.error("Erro na rota empacotar:", error);

@@ -5,57 +5,70 @@ import fs from "node:fs/promises";
 import AdmZip from 'adm-zip';
 import { PDFDocument } from "pdf-lib";
 
+console.log("ZipService criado com processo: ");
+
+interface IZipService {
+  processoZipPdf : string;
+}
 export class ZipService {
-    constructor(private processo: any) {}
-    
-    async padronizaProcesso(): Promise<void> {
-        const root = await fs.mkdtemp(path.join(os.tmpdir(), "proc-"));
-        const temp = await fs.mkdtemp(path.join(os.tmpdir(), "proc-"));
+  constructor(private processo: IZipService) {}
 
-        const base64Zip = await this.processo.processoZipPdf;
-        const zipBuffer = Buffer.from(base64Zip, 'base64');
-        const zip = new AdmZip(zipBuffer);
-        zip.extractAllTo(root, true);
+  async padronizaProcesso(): Promise<string> {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "proc-"));
+    const temp = await fs.mkdtemp(path.join(os.tmpdir(), "proc-"));
 
-        const itens = await fs.readdir(root, { withFileTypes: true });
-        
-        for (const item of itens) {
-            
-            if (item.name.includes("Certidões")) {
-                const certPath = path.join(root, item.name)
-                const file = await fs.readdir(certPath,{withFileTypes:true})
-                
-                if(file.length === 1){
-                    const fileName = file[0].name
-                    await fs.rename(path.join(certPath,fileName),path.join(temp,"CNDs.pdf"))
-                }
-                if(file.length > 1){
-                    const merged = await PDFDocument.create();
+    const base64Zip = await this.processo.processoZipPdf;
+    const zipBuffer = Buffer.from(base64Zip, "base64");
+    const zip = new AdmZip(zipBuffer);
+    zip.extractAllTo(root, true);
 
-                    for (const pdfPath of file) {
-                        const bytes = await fs.readFile(pdfPath.name);
-                        const pdf = await PDFDocument.load(bytes);
-                        const pages = await merged.copyPages(pdf, pdf.getPageIndices());
-                        pages.forEach(p => merged.addPage(p));
-                    }
-                    await fs.writeFile(
-                    path.join(temp, "CNDs.pdf"),
-                    await merged.save()
-                    );
-                }
-            }
+    const itens = await fs.readdir(root, { withFileTypes: true });
 
-            if(item.name.includes("Xmls")){
-                const xmlPath = path.join(root, item.name)
-                const file = await fs.readdir(xmlPath,{withFileTypes:true})
-                
-                if(file.length === 1){
-                    const fileName = file[0].name
-                    await fs.rename(path.join(xmlPath,fileName),path.join(temp,fileName))
-                }
-            } 
+    for (const item of itens) {
+      if (item.name.includes("Certidões")) {
+        const certPath = path.join(root, item.name);
+        const file = await fs.readdir(certPath, { withFileTypes: true });
+
+        if (file.length === 1) {
+          const fileName = file[0].name;
+          await fs.rename(
+            path.join(certPath, fileName),
+            path.join(temp, "CNDs.pdf"),
+          );
         }
-        const conteudo = await fs.readdir(temp);
-        console.log("Conteúdo do temp:", conteudo);
-    }           
+        if (file.length > 1) {
+          const merged = await PDFDocument.create();
+
+          for (const pdfPath of file) {
+            const bytes = await fs.readFile(path.join(certPath, pdfPath.name));
+            const pdf = await PDFDocument.load(bytes);
+            const pages = await merged.copyPages(pdf, pdf.getPageIndices());
+            pages.forEach((p) => merged.addPage(p));
+          }
+          await fs.writeFile(path.join(temp, "CNDs.pdf"), await merged.save());
+        }
+      }
+
+      if (item.name.includes("Xmls")) {
+        const xmlPath = path.join(root, item.name);
+        const file = await fs.readdir(xmlPath, { withFileTypes: true });
+
+        if (file.length === 1) {
+          const fileName = file[0].name;
+          await fs.rename(
+            path.join(xmlPath, fileName),
+            path.join(temp, fileName),
+          );
+        }
+      }
+
+      if (item.name.includes("Processo")) {
+        const procPath = path.join(root, item.name);
+        await fs.rename(procPath, path.join(temp, "Processo.pdf"));
+      }
+    }
+    const conteudo = await fs.readdir(temp);
+    console.log("Conteúdo do temp:", conteudo);
+    return temp;
+  }
 }

@@ -48,12 +48,13 @@ await app.register(fastifyApiReference, {
   routePrefix: "/docs",
 });
 
-app.register(import("./features/orcado/orcado.routes.js"));
-app.register(import("./features/realizado/realizado.routes.js"));
-app.register(import("./features/resumoFinanceiro/resumoFinanceiro.routes.js"));
-app.register(import("./features/tendencia/tendencia.routes.js"));
-app.register(import("./features/analytics/analytics.routes.js"));
 app.register(import("./clients/myFlux/myflux.routes.js"));
+app.register(import("./features/orcado/orcado.routes.js"));
+app.register(import("./features/tendencia/tendencia.routes.js"));
+app.register(import("./features/realizado/realizado.routes.js"));
+app.register(import("./features/analytics/analytics.routes.js"));
+app.register(import("./features/downloadProcess/dowloadProcess.routes.js"));
+app.register(import("./features/resumoFinanceiro/resumoFinanceiro.routes.js"));
 
 await errorHandler(app);
 

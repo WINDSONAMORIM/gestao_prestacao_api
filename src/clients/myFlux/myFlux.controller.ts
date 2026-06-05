@@ -1,12 +1,13 @@
+import { MyFluxService } from "./myFlux.repository.js";
 import { ParammsLogin, ParamsGetTitle } from "./myFlux.schema.js";
-import { MyfluxService } from "./myFlux.service.js";
+// import { MyfluxService } from "./myFlux.service.js";
+
 
 export class MyfluxController {
-  constructor(private service: MyfluxService) {}
+  constructor(private service: MyFluxService) {}
 
   async login(params: ParammsLogin) {
     const result = await this.service.login(params);
-    console.log("Controller: " + result);
     return result;
   }
 
