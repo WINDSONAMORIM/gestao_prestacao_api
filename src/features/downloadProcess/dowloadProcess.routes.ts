@@ -29,7 +29,6 @@ export default async function downloadProcessRouter(app: FastifyInstance) {
         const result = await controller.fillOutWorksheet(
             buffer,
         );
-        console.log("Rota downloadProcess-preview: " + JSON.stringify(result, null, 2));
         return reply.send(result);
       } catch (error: any) {
         console.error("Erro na rota downloadProcess-preview:", error);

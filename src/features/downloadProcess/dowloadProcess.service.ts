@@ -5,13 +5,26 @@ import { xlxsParseJson } from "../../shared/xlsx/xlsx.service.js";
 const service = new MyFluxService();
 const controller = new MyfluxController(service);
 
+interface Processo {
+  Seq: string;
+  Id: string;
+}
+
+export interface Table{
+  headers: string[]
+  data: Processo[]
+}
+
 export class DownloadProcessService {
   constructor() {}
 
-  async fillOutWorksheet(file: Buffer): Promise<{ headers: string[]; dataRows: any[] }> {
-    const { headers, dataRows } = await xlxsParseJson(file);
-    return { headers, dataRows };
-  }
+  async fillOutWorksheet(file: Buffer): Promise<Table> {
+    const result = await xlxsParseJson<Processo>(file);
+    console.log(result)
+
+    return result
+    };
+  
 
   async downloaderProcesses(
     processId: number[],
