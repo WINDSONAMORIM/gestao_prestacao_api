@@ -28,7 +28,6 @@ export class DownloadProcessService {
   
   
   async downloaderProcesses(processId: number[],token: string): Promise<Buffer> {
-    // const processos: object[] = [];
     const processos: string[] = [];
     const zipService = new ZipService()
     try {
@@ -36,8 +35,7 @@ export class DownloadProcessService {
         console.log(`Baixando processo com ID: ${id}`);
         const result = await controller.downloaderProcess(id, token);
         const padrao = await zipService.padronizaProcesso(result)
-        console.log(padrao)
-        // processos.push(result);
+        console.log(`padrao em downloadProcess Service: ${padrao}`)
         processos.push(padrao);
       }
       const buffer = await zipService.zipProcesso(processos)

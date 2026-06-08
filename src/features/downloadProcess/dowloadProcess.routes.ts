@@ -64,9 +64,16 @@ export default async function downloadProcessRouter(app: FastifyInstance) {
 
         const token = authHeader.split(" ")[1];
 
+        console.log(`Paramns downloadProcess: ${request.body}`)
         const result = await controller.downloaderProcesses(request.body, token);
 
-        return reply.send(result);
+        return reply.
+          header("Content-Type", "application/zip")
+          .header(
+            "Content-Disposition",
+            'attachment; filename="processos.zip"'
+          ).send(result);
+          
       } catch (error: any) {
         console.error("Erro na rota downloadProcess:", error);
         return reply
