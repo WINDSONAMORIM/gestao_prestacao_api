@@ -92,8 +92,8 @@ export default async function myFluxRouter(app: FastifyInstance) {
         const {id} = request.params;
 
         const result = await controller.downloaderProcess(id, token);
-        const zipService = new ZipService(result);
-        await zipService.padronizaProcesso();
+        const zipService = new ZipService();
+        await zipService.padronizaProcesso(result);
         return reply.send(result)
       } catch (error: any) {
          console.error("Erro na rota empacotar:", error);

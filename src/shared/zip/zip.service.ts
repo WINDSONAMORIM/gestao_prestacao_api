@@ -5,19 +5,17 @@ import fs from "node:fs/promises";
 import AdmZip from 'adm-zip';
 import { PDFDocument } from "pdf-lib";
 
-console.log("ZipService criado com processo: ");
-
 interface IZipService {
   processoZipPdf : string;
 }
 export class ZipService {
-  constructor(private processo: IZipService) {}
+  constructor() {}
 
-  async padronizaProcesso(): Promise<string> {
+  async padronizaProcesso(processo: IZipService): Promise<string> {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "proc-"));
     const temp = await fs.mkdtemp(path.join(os.tmpdir(), "proc-"));
 
-    const base64Zip = await this.processo.processoZipPdf;
+    const base64Zip = processo.processoZipPdf;
     const zipBuffer = Buffer.from(base64Zip, "base64");
     const zip = new AdmZip(zipBuffer);
     zip.extractAllTo(root, true);
@@ -70,5 +68,16 @@ export class ZipService {
     const conteudo = await fs.readdir(temp);
     console.log("Conteúdo do temp:", conteudo);
     return temp;
+  }
+
+  async zipProcesso(processos:string[]): Promise<Buffer>{
+    const zip = new AdmZip();
+    let cont = 1
+    for(const processo of processos){
+      const nomepasta = `Processo_${cont}`
+      zip.addLocalFolder(processo, nomepasta);
+      cont++
+    }
+    return zip.toBuffer()
   }
 }

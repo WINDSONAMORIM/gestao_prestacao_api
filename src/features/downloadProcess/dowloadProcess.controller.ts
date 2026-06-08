@@ -7,4 +7,9 @@ export class DownloadProcessController {
     const result = await this.service.fillOutWorksheet(file);
     return result;
   }
+
+  async downloaderProcesses(processId:number[], token:string){
+    const result = await this.service.downloaderProcesses(processId,token)
+    return result
+  }
 }
