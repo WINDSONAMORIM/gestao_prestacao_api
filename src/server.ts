@@ -55,6 +55,7 @@ app.register(import("./features/realizado/realizado.routes.js"));
 app.register(import("./features/analytics/analytics.routes.js"));
 app.register(import("./features/downloadProcess/dowloadProcess.routes.js"));
 app.register(import("./features/resumoFinanceiro/resumoFinanceiro.routes.js"));
+app.register(import("./shared/sse/sse.routes.js"))
 
 await errorHandler(app);
 

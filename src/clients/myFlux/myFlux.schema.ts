@@ -31,7 +31,12 @@ export const processoSchema = z.object({
     id: z.coerce.number(),
 })
 
-export const processosSchema = z.array(z.number())
+export const processSchema = z.object({
+  Seq: z.string(),
+  Id: z.string(),
+});
+
+export const processosSchema = z.array(processSchema);
 
 export type ParammsLogin = z.infer<typeof myFluxLoginSchema>;
 export type ParamsGetTitle = z.infer<typeof processoSchema>

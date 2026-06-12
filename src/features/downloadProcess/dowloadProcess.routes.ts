@@ -64,7 +64,7 @@ export default async function downloadProcessRouter(app: FastifyInstance) {
 
         const token = authHeader.split(" ")[1];
 
-        console.log(`Paramns downloadProcess: ${request.body}`)
+        console.log("Paramns downloadProcess:", request.body);
         const result = await controller.downloaderProcesses(request.body, token);
 
         return reply.

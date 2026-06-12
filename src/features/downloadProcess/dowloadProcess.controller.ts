@@ -1,4 +1,5 @@
-import { DownloadProcessService, Table } from "./dowloadProcess.service.js";
+import { DownloadProcessService} from "./dowloadProcess.service.js";
+import { Processo, Table } from "./dowloadProcess.types.js";
 
 export class DownloadProcessController {
   constructor(private service: DownloadProcessService) {}
@@ -8,8 +9,8 @@ export class DownloadProcessController {
     return result;
   }
 
-  async downloaderProcesses(processId:number[], token:string){
-    const result = await this.service.downloaderProcesses(processId,token)
+  async downloaderProcesses(processos: Processo[], token:string){
+    const result = await this.service.downloaderProcesses(processos,token)
     return result
   }
 }
