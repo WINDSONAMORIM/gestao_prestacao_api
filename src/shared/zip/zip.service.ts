@@ -72,13 +72,7 @@ export class ZipService {
         await fs.rename(procPath, path.join(temp, "Processo.pdf"));
       }
     }
-    
-    // await fs.rm(tempRoot, {
-    //   recursive: true,
-    //   force: true,
-    // });
-    
-
+  
     return temp;
   }
 
@@ -88,6 +82,7 @@ export class ZipService {
     for(const processo of processos){
       console.log(`Add: ${processo}`)
       const nomepasta = path.basename(processo)
+      // const nomepasta = await path.basename(processo)
 
       zip.addLocalFolder(processo, nomepasta);
       cont++

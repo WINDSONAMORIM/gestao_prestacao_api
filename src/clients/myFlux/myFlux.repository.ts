@@ -1,3 +1,4 @@
+import { stringParse } from "../../shared/string/string.service.js";
 import { ParammsLogin, ParamsGetTitle } from "./myFlux.schema.js";
 
 interface LoginResponse {
@@ -51,10 +52,7 @@ export class MyFluxService {
     }
   }
 
-  async getTitle(
-    processId: ParamsGetTitle,
-    token: string,
-  ): Promise<TitleResposnse> {
+  async getTitle(processId: ParamsGetTitle, token: string): Promise<TitleResposnse> {
     console.log(processId.id);
     try {
       const response = await fetch(
@@ -80,9 +78,11 @@ export class MyFluxService {
       }
 
       console.log(`Process: ${processId.id} Data: ${data.titulo}`);
-      const fullTitle = data.titulo;
-      const partes = fullTitle.split("_");
-      const titulo = `${partes[0]}_${partes[1]}`;
+
+      // const fullTitle = data.titulo.replaceAll("/","");
+      // const partes = fullTitle.split("_");
+      // const titulo = `${partes[0]}_${partes[1]}`;
+      const titulo = stringParse(data.titulo);
       return { titulo };
     } catch (error) {
       console.error("Erro em getTitle:", error);

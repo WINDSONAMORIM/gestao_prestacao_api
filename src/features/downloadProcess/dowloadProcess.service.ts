@@ -27,7 +27,9 @@ export class DownloadProcessService {
           console.log(`Baixando processo com ID: ${processo.Id}`);
           sendProgress(processo.Id, "pendente")
           const result = await controller.downloaderProcess(Number(processo.Id), token);
-          const pasta = `${processo.Seq}_${processo.Id}`;
+          const title = await controller.getTitle({id : Number(processo.Id)}, token);
+          // const pasta = `${processo.Seq}_${processo.Id}`;
+          const pasta = `${processo.Seq}_${title.titulo}`;
           const padrao = await zipService.padronizaProcesso(result, pasta)
           sendProgress(processo.Id, "baixando")
           console.log(`padrao em downloadProcess Service: ${padrao}`)
