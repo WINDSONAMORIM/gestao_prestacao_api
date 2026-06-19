@@ -2,30 +2,32 @@ import { FastifyInstance } from "fastify";
 import { clients } from "./sse.types.js";
 
 export default async function sseRoutes(app: FastifyInstance) {
-app.get("/downloadProcess/events", async (request, reply) => {
+  app.get("/downloadProcess/events", (request, reply) => {
   const clientId = crypto.randomUUID();
 
-  reply.header("Content-Type", "text/event-stream");
-  reply.header("Cache-Control", "no-cache");
-  reply.header("Connection", "keep-alive");
+  reply.raw.writeHead(200, {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+    "Access-Control-Allow-Origin": "http://localhost:3000",
+    "Access-Control-Allow-Credentials": "true",
+  });
 
   reply.raw.flushHeaders();
+  reply.hijack();
 
-  reply.raw.write(
-      `data: ${JSON.stringify({
-        connected: true,
-        clientId,
-      })}\n\n`
+  const send = (event: string, data: any) => {
+    reply.raw.write(
+      `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`
     );
+  };
 
-  clients.set(clientId, {
-    id: clientId,
-    reply,
-  });
+  send("connected", { clientId, connected: true });
+
+  clients.set(clientId, { id: clientId, write: send, reply });
 
   request.raw.on("close", () => {
     clients.delete(clientId);
-    console.log(`Cliente ${clientId} desconectado`);
+    console.log("Cliente SSE desconectado:", clientId);
   });
-});
-}
+})}

@@ -16,8 +16,9 @@ dotenv.config();
 const app = Fastify();
 
 app.register(cors, {
-  origin: true,
+  origin: ["http://localhost:3000"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
 });
 
 app.setValidatorCompiler(validatorCompiler);
