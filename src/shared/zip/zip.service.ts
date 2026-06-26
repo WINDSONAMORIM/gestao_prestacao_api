@@ -13,7 +13,7 @@ export class ZipService {
   constructor() {}
 
   async padronizaProcesso(processo: IZipService, pasta: string): Promise<string> {
-
+    console.log("PadronizaProcesso",processo)
     const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "temp-"));
     const temp = path.join(tempRoot, pasta);
     console.log("Pasta temp:", temp);

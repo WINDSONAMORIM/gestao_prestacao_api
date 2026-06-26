@@ -15,12 +15,6 @@ import { errorHandler } from "./utils/erroHandler.js";
 dotenv.config();
 const app = Fastify();
 
-app.register(cors, {
-  origin: ["http://localhost:3000"],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true
-});
-
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
@@ -57,6 +51,15 @@ app.register(import("./features/analytics/analytics.routes.js"));
 app.register(import("./features/downloadProcess/dowloadProcess.routes.js"));
 app.register(import("./features/resumoFinanceiro/resumoFinanceiro.routes.js"));
 app.register(import("./shared/sse/sse.routes.js"))
+
+app.register(cors, {
+  origin: [
+    "http://localhost:3000",
+    "https://gestao-prestacao-front.vercel.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
+});
 
 await errorHandler(app);
 
