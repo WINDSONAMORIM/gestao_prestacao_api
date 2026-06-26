@@ -2,6 +2,15 @@ import { FastifyInstance } from "fastify";
 import { clients } from "./sse.types.js";
 
 export default async function sseRoutes(app: FastifyInstance) {
+  app.options("/downloadProcess/events", (req, reply) => {
+    reply
+      .header("Access-Control-Allow-Origin", req.headers.origin || "*")
+      .header("Access-Control-Allow-Methods", "GET, OPTIONS")
+      .header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+      .header("Access-Control-Allow-Credentials", "true")
+      .send();
+  });
+
   app.get("/downloadProcess/events", (request, reply) => {
     const clientId = crypto.randomUUID();
 
